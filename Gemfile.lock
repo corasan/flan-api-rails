@@ -89,6 +89,7 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
+    pg (0.18.4)
     puma (5.5.2)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -124,7 +125,6 @@ GEM
     rake (13.0.6)
     reline (0.3.0)
       io-console (~> 0.5)
-    sqlite3 (1.4.2)
     thor (1.1.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -139,9 +139,9 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  pg (~> 0.18.4)
   puma (~> 5.0)
   rails (~> 7.0.0)
-  sqlite3 (~> 1.4)
   tzinfo-data
 
 RUBY VERSION
