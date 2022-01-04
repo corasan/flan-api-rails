@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :expenses
+
   encrypts :password
   validates :password, presence: true, length: {
     minimum: 8,
@@ -6,5 +8,3 @@ class User < ApplicationRecord
   }, on: :create
   validates :email, presence: true
 end
-
-# rails g model Expense name:string amount:
