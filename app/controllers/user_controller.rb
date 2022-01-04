@@ -6,18 +6,18 @@ class UserController < ApplicationController
   end
 
   def create
-    @user = User.create!(user_params)
+    @user = User.create(user_params)
     if @user.valid?
-      render_token_and_user(@user)
+      render_token_and_user
     else
       render json: { message: 'Invalid email or password' }
     end
   end
 
-  def logged_in?
+  def login
     @user = User.find_by email: params[:email]
-    if @user && user.authenticate(params[:password])
-      render_token_and_user(@user)
+    if @user && authenticate(params[:password])
+      render_token_and_user
     else
       render json: { error: 'Invalid username or password' }
     end
@@ -30,16 +30,16 @@ class UserController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :password, :email)
+    params.require(:user).permit(:password, :email)
   end
 
   def authenticate(password)
-    user = @user.decrypt
-    user.password == password
+    puts "USER PASSWORD IS ENCRYPTED: #{@user.encrypted_attribute?(:password)}"
+    @user.password == password
   end
 
-  def render_token_and_user(user)
-    token = encode_token({ user_id: user.id })
-    render json: { user: { email: user.email, id: user.id }, token: token }
+  def render_token_and_user
+    token = encode_token({ user_id: @user.id })
+    render json: { user: { email: @user.email, id: @user.id }, token: token }
   end
 end
