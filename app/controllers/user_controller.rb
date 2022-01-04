@@ -40,6 +40,7 @@ class UserController < ApplicationController
 
   def render_token_and_user
     token = encode_token({ user_id: @user.id })
-    render json: { user: { email: @user.email, id: @user.id }, token: token }
+    exp = Time.now.to_i + 4 * 3600
+    render json: { user: { email: @user.email, id: @user.id }, token: token, exp: exp }
   end
 end

@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   @key = Rails.application.credentials.active_record_encryption.primary_key
 
   def encode_token(payload)
-    JWT.encode(payload, @key)
+    JWT.encode(payload, @key, 'HS512')
   end
 
   def auth_header
@@ -18,7 +18,9 @@ class ApplicationController < ActionController::API
     token = auth_header.split(' ')[1]
     # header: { 'Authorization': 'Bearer <token>' }
     begin
-      JWT.decode(token, @key, true, algorithm: 'HS256')
+      JWT.decode(token, @key, true, algorithm: 'HS512')
+    rescue JWT::ExpiredSignature
+      render json: { message: 'Session expired' }
     rescue JWT::DecodeError
       nil
     end
