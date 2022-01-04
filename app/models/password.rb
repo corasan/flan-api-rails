@@ -1,7 +1,6 @@
 class Password < ApplicationRecord
   belongs_to :user
   encrypts :value
-  encrypts :user_id, deterministic: true
 
   validates :value, presence: true, length: {
     minimum: 8,
