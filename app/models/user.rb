@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :expenses
+  has_one :user_infos
 
   encrypts :password
   validates :password, presence: true, length: {
