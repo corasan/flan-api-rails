@@ -1,0 +1,12 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rent: 1200.00
+  income: 3600.00
+  savings: 500.00
+  credit_cards: 200
+  loans: 340
+  initial_checkings: 800
+  initial_savings: 1200
+  user: one
+
