@@ -9,7 +9,8 @@ class EstimateController < ApplicationController
   def estimate_checking
     month = Time.now.month
     arr = [{ checking: checking, savings: savings, debt: debt, month: month }]
-    (1..range).each do |x|
+    puts params
+    (1..range.to_i).each do |x|
       arr.push(est_object(arr[-1], month + x))
     end
 
@@ -43,7 +44,7 @@ class EstimateController < ApplicationController
   end
 
   def estimate_checking_params
-    params.permit(%i[range])
+    params.permit(:range)
   end
 
   def user_info
