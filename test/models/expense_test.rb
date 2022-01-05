@@ -1,8 +1,10 @@
 class ExpenseTest < ActiveSupport::TestCase
-  test_user = User.find_by email: 'test@gmail.com'
+  # test_user = User.find_by email: 'test@gmail.com'
   test_expense = Expense.find_by name: 'Expense One'
 
-  puts test_user.id
+  def test_user
+    User.find_by email: 'test@gmail.com'
+  end
 
   test 'can create an expense' do
     exp = Expense.create(name: 'Expense Two', frequency: 'monthly', amount: 10.99, user_id: test_user.id)
@@ -25,7 +27,6 @@ class ExpenseTest < ActiveSupport::TestCase
   end
 
   test 'can update expense' do
-    puts test_expense.name
     test_expense.update name: 'Changed expense name'
     test_expense.save
     assert test_expense.name == 'Changed expense name'

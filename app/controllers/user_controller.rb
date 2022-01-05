@@ -7,10 +7,9 @@ class UserController < ApplicationController
   end
 
   def create
-    puts params
     @user = User.create(user_params)
-    @password = Password.create(password_params(@user))
-    if @user.valid?
+    password = Password.create(password_params(@user))
+    if @user.valid? && password
       render_token_and_user
     else
       render json: { message: 'Invalid email or password' }
@@ -19,7 +18,6 @@ class UserController < ApplicationController
 
   def login
     @user = User.find_by email: params[:email]
-    @password = Password.find_by user_id: @user.id
     if @user && authenticate(params[:password])
       render_token_and_user
     else
