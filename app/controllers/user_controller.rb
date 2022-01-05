@@ -1,7 +1,6 @@
 # UserController
 class UserController < ApplicationController
   before_action :authorized, only: [:auto_login]
-  alias_attribute :password, :value
 
   def index
     User.find(params[:id])
