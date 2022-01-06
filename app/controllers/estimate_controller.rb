@@ -2,18 +2,24 @@
 class EstimateController < ApplicationController
   before_action :authorized
 
-  # def index
-  #
-  # end
+  def initialize_estimate
+    @income = income
+    @checking = checking
+    @savings = savings
+    @debt = debt
+    @rent = rent
+    @will_save = will_save
+    @will_pay_debt = will_pay_debt
+    @expenses_total = expenses_total
+  end
 
   def estimate_checking
+    initialize_estimate
     month = Time.now.month
-    arr = [{ checking: checking, savings: savings, debt: debt, month: month }]
-    puts params
+    arr = [{ checking: @checking, savings: @savings, debt: @debt, month: month }]
     (1..range.to_i).each do |x|
       arr.push(est_object(arr[-1], month + x))
     end
-
     render json: { estimate: arr }
   end
 
@@ -32,15 +38,15 @@ class EstimateController < ApplicationController
   end
 
   def calc_checking(num)
-    num + income - rent - expenses_total - will_pay_debt - will_save
+    num + @income - @rent - @expenses_total - @will_pay_debt - @will_save
   end
 
   def calc_savings(num)
-    num + will_save
+    num + @will_save
   end
 
   def calc_debt(num)
-    num - will_pay_debt
+    num - @will_pay_debt
   end
 
   def estimate_checking_params
