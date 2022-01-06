@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_171204) do
+ActiveRecord::Schema.define(version: 2022_01_06_163704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -35,6 +35,14 @@ ActiveRecord::Schema.define(version: 2022_01_05_171204) do
     t.index ["user_id"], name: "index_passwords_on_user_id"
   end
 
+  create_table "refresh_tokens", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
+  end
+
   create_table "user_infos", force: :cascade do |t|
     t.decimal "rent"
     t.decimal "income"
@@ -57,5 +65,6 @@ ActiveRecord::Schema.define(version: 2022_01_05_171204) do
 
   add_foreign_key "expenses", "users"
   add_foreign_key "passwords", "users"
+  add_foreign_key "refresh_tokens", "users"
   add_foreign_key "user_infos", "users"
 end

@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   post '/expense', to: 'expense#create'
   put '/expense/:id', to: 'expense#update'
 
+  post '/auth/refresh_token', to: 'refresh_token#index'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

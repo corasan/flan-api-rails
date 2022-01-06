@@ -48,8 +48,6 @@ class UserController < ApplicationController
   end
 
   def render_token_and_user
-    exp = Time.now.to_i + 3 * 3600
-    token = encode_token({ user_id: @user.id, exp: exp })
-    render json: { user: { email: @user.email, id: @user.id }, token: token, exp: exp }
+    render json: { user: { email: @user.email, id: @user.id }, access_token: encode_token, refresh_token: create_refresh_token }
   end
 end
