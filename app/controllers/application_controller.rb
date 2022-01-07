@@ -1,21 +1,22 @@
 # ApplicationController
 class ApplicationController < ActionController::API
-  before_action :authorized
+  before_action :authorized, only: [:decoded_token, :logged_in_user]
 
-  def encode_token
-    JWT.encode({ exp: Time.now.to_i * 60 * 60 * 24, **token_payload }, key, 'HS512', exp_leeway: 30)
+  def encode_token(payload)
+    JWT.encode({ exp: Time.now.to_i * 60 * 60 * 24, **payload }, key, 'HS512', exp_leeway: 30)
   end
 
-  def encode_refresh_token
-    JWT.encode({ exp: Time.now.to_i * 60 * 60 * 300, **token_payload }, key, 'HS512', exp_leeway: 30)
+  def encode_refresh_token(payload)
+    JWT.encode({ exp: Time.now.to_i * 60 * 60 * 300, **payload }, key, 'HS512', exp_leeway: 30)
   end
 
-  def create_refresh_token
-    t = RefreshToken.find_by user_id: @user.id
+  def create_refresh_token(payload)
+    t = RefreshToken.find_by user_id: payload[:id]
+    token = encode_refresh_token(payload)
     if t.nil?
-      RefreshToken.create(token: encode_refresh_token, user_id: @user.id).token
+      RefreshToken.create(token: token, user_id: payload[:id]).token
     else
-      t.update token: encode_refresh_token
+      t.update token: token
       t.token
     end
   end
@@ -46,9 +47,10 @@ class ApplicationController < ActionController::API
   end
 
   def logged_in_user
+    puts decoded_token
     return nil unless decoded_token
 
-    user_id = decoded_token[0]['user_id']
+    user_id = decoded_token[0]['id']
     @user = User.find_by(id: user_id)
   end
 
@@ -62,11 +64,5 @@ class ApplicationController < ActionController::API
 
   def key
     Rails.application.credentials.active_record_encryption.primary_key
-  end
-
-  private
-
-  def token_payload
-    { email: @user.email, user_id: @user.id }
   end
 end

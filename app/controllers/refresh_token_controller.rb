@@ -1,10 +1,12 @@
 class RefreshTokenController < ApplicationController
-  before_action :authorized
   def index
-    r = RefreshToken.find_by token: auth_header.split(' ')[1]
+    r = RefreshToken.find_by token: params[:token]
 
-    if !r.token.nil?
-      render json: { user: { email: @user.email, id: @user.id }, access_token: encode_token, refresh_token: create_refresh_token }
+    if !r.nil?
+      decoded = decode_refresh_token(r.token)
+      user = User.find_by id: decoded[0]['id']
+      puts "USER -> #{user}"
+      render_token_and_user(user)
     else
       render json: { message: 'Invalid refresh token' }
     end
@@ -16,7 +18,8 @@ class RefreshTokenController < ApplicationController
     params.permit(:token)
   end
 
-  def render_token_and_user
-    render json: { user: { email: @user.email, id: @user.id }, access_token: encode_token, refresh_token: create_refresh_token }
+  def render_token_and_user(user)
+    payload = { email: user.email, id: user.id }
+    render json: { user: payload, access_token: encode_token(payload), refresh_token: create_refresh_token(payload) }
   end
 end

@@ -9,3 +9,6 @@ Metrics/AbcSize:
 
 Layout/LineLength:
   Max: 140
+
+Style/SymbolArray:
+  EnforcedStyle: brackets

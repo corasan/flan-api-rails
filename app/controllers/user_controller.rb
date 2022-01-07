@@ -48,6 +48,7 @@ class UserController < ApplicationController
   end
 
   def render_token_and_user
-    render json: { user: { email: @user.email, id: @user.id }, access_token: encode_token, refresh_token: create_refresh_token }
+    payload = { email: @user.email, id: @user.id }
+    render json: { user: payload, access_token: encode_token(payload), refresh_token: create_refresh_token(payload) }
   end
 end
