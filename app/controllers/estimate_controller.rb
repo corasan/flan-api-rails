@@ -13,19 +13,22 @@ class EstimateController < ApplicationController
     @expenses_total = expenses_total
   end
 
-  def estimate_checking
+  def index
     initialize_estimate
-    month = Time.now.month
-    arr = [{ checking: @checking, savings: @savings, debt: @debt, month: month }]
-    (1..range.to_i).each do |x|
-      arr.push(est_object(arr[-1], month + x))
-    end
-    render json: { estimate: arr }
+    now = Time.now
+    arr = [{ checking: @checking, savings: @savings, debt: @debt, time: now }]
+    (0..range.to_i).each { |x| arr.push(est_object(arr[-1], now.month + x)) }
+
+    render json: { estimate: arr, income_after_expenses: income_after_expenses, will_save: @will_save, will_pay_debt: @will_pay_debt }
+  end
+
+  def income_after_expenses
+    @income - @will_save - @will_pay_debt - @expenses_total
   end
 
   private
 
-  def est_object(prev, month)
+  def est_object(prev, num)
     {
       checking: calc_checking(prev[:checking]),
       savings: calc_savings(prev[:savings]),
@@ -33,7 +36,7 @@ class EstimateController < ApplicationController
       prev_checking: prev[:checking],
       prev_savings: prev[:savings],
       prev_debt: prev[:debt],
-      month: month
+      time: num.month.from_now
     }
   end
 

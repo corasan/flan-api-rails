@@ -3,15 +3,13 @@ class ExpenseController < ApplicationController
   before_action :authorized
 
   def index
-    exps = Expense.where user_id: @user.id
-    expenses = exps.map { |e| expense_object(e) }
-    render json: expenses
+    expenses = all_expenses.map { |e| expense_object(e) }
+    render json: { expenses: expenses, total: total }
   end
 
   def create
     exp_obj = { user_id: @user.id, **expense_params }
-    e = Expense.create(exp_obj)
-    render json: expense_object(e)
+    render json: Expense.create(exp_obj)
   end
 
   def update
@@ -24,8 +22,12 @@ class ExpenseController < ApplicationController
 
   private
 
+  def total
+    all_expenses.sum(:amount)
+  end
+
   def expense_params
-    params.require(:expense).permit(%i[name amount frequency category id])
+    params.require(:expense).permit([:name, :amount, :frequency, :category, :id])
   end
 
   def expense_object(exp)
@@ -36,5 +38,9 @@ class ExpenseController < ApplicationController
       category: exp.category,
       frequency: exp.frequency
     }
+  end
+
+  def all_expenses
+    Expense.where user_id: @user.id
   end
 end
