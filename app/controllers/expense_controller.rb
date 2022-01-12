@@ -4,7 +4,7 @@ class ExpenseController < ApplicationController
 
   def index
     expenses = all_expenses.map { |e| expense_object(e) }
-    render json: { expenses: expenses, total: total }
+    render json: { expenses: expenses, total: total, pie_data: pie_data }
   end
 
   def create
@@ -21,6 +21,14 @@ class ExpenseController < ApplicationController
   end
 
   private
+
+  def pie_data
+    arr = []
+    all_expenses.group_by(&:category).each_pair do |k, v|
+      arr.push({ category: k, value: v.sum(&:amount) })
+    end
+    arr
+  end
 
   def total
     all_expenses.sum(:amount)
