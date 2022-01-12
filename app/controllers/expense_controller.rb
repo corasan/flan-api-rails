@@ -20,6 +20,11 @@ class ExpenseController < ApplicationController
     render json: expense_object(e)
   end
 
+  def destroy
+    exp = Expense.find_by id: params[:id]
+    exp.destroy
+  end
+
   private
 
   def pie_data

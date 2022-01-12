@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/expenses', to: 'expense#index'
   post '/expense', to: 'expense#create'
   put '/expense/:id', to: 'expense#update'
+  delete '/expense/:id', to: 'expense#destroy'
 
   post '/auth/refresh_token', to: 'refresh_token#index'
 
