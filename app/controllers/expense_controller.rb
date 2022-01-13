@@ -13,7 +13,6 @@ class ExpenseController < ApplicationController
   end
 
   def update
-    puts "THESE ARE THE PARAMS -> #{params}"
     e = Expense.find_by id: params[:id]
     e.update(expense_params)
     e.save
