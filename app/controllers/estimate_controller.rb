@@ -15,18 +15,37 @@ class EstimateController < ApplicationController
 
   def index
     initialize_estimate
-    now = Time.now
-    arr = [{ checking: @checking, savings: @savings, debt: @debt, time: now }]
-    (0..range.to_i).each { |x| arr.push(est_object(arr[-1], now.month + x)) }
 
-    render json: { estimate: arr, income_after_expenses: income_after_expenses, will_save: @will_save, will_pay_debt: @will_pay_debt }
+    data = generate_data
+    render json: {
+      estimate: date_formatted_estimate(data),
+      income_after_expenses: income_after_expenses,
+      will_save: @will_save,
+      will_pay_debt: @will_pay_debt
+    }
   end
 
   def income_after_expenses
     @income - @will_save - @will_pay_debt - @expenses_total
   end
 
+  def chart
+    initialize_estimate
+    render json: generate_data
+  end
+
   private
+
+  def generate_data
+    now = Time.now
+    arr = [{ checking: @checking, savings: @savings, debt: @debt, month: now.month, year: now.year }]
+    (0..range.to_i).each { |x| arr.push(est_object(arr[-1], now.month + x)) }
+    arr
+  end
+
+  def date_formatted_estimate(arr)
+    arr.group_by { |i| i[:year] }
+  end
 
   def est_object(prev, num)
     {
@@ -36,7 +55,8 @@ class EstimateController < ApplicationController
       prev_checking: prev[:checking],
       prev_savings: prev[:savings],
       prev_debt: prev[:debt],
-      time: num.month.from_now
+      month: num.month.from_now.month,
+      year: num.month.from_now.year
     }
   end
 

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   get '/user/estimates', to: 'estimate#index'
   get '/user/estimate/checking', to: 'estimate#estimate_checking'
+  get '/user/estimate/chart', to: 'estimate#chart'
 
   get '/expenses', to: 'expense#index'
   post '/expense', to: 'expense#create'
