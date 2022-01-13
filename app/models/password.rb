@@ -5,5 +5,5 @@ class Password < ApplicationRecord
   validates :value, presence: true, length: {
     minimum: 8,
     too_short: 'Password must be at least 8 characters long'
-  }, on: %i[create update]
+  }, on: [:create, :update]
 end

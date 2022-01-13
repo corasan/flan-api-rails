@@ -24,7 +24,7 @@ class UserInfoController < ApplicationController
   private
 
   def user_info_params
-    params.require(:user_info).permit(%i[income checking rent savings debt will_save will_pay_debt])
+    params.require(:user_info).permit([:income, :checking, :rent, :savings, :debt, :will_save, :will_pay_debt])
   end
 
   def info
