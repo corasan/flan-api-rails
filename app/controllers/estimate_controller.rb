@@ -135,6 +135,6 @@ class EstimateController < ApplicationController
   end
 
   def will_pay_debt
-    user_info.will_pay_debt
+    expenses.select { |e| e.category == 'debt' }.sum(&:amount)
   end
 end
