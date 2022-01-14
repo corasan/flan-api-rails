@@ -21,7 +21,8 @@ class EstimateController < ApplicationController
       estimate: date_formatted_estimate(data),
       income_after_expenses: income_after_expenses,
       will_save: @will_save,
-      will_pay_debt: @will_pay_debt
+      will_pay_debt: @will_pay_debt,
+      debt_end: calc_debt_end
     }
   end
 
@@ -47,21 +48,23 @@ class EstimateController < ApplicationController
     arr.group_by { |i| i[:year] }
   end
 
-  def est_object(prev, num)
+  def est_object(prev, date_num)
+    debt = calc_debt(prev[:debt])
     {
-      checking: calc_checking(prev[:checking]),
+      checking: calc_checking(prev[:checking], debt),
       savings: calc_savings(prev[:savings]),
-      debt: calc_debt(prev[:debt]),
+      debt: debt <= 0 ? 0 : debt,
       prev_checking: prev[:checking],
       prev_savings: prev[:savings],
-      prev_debt: prev[:debt],
-      month: num.month.from_now.month,
-      year: num.month.from_now.year
+      prev_debt: prev[:debt] <= 0 ? 0 : prev[:debt],
+      month: date_num.month.from_now.month,
+      year: date_num.month.from_now.year
     }
   end
 
-  def calc_checking(num)
-    num + @income - @rent - @expenses_total - @will_pay_debt - @will_save
+  def calc_checking(num, debt)
+    account_for_debt = debt <= 0 ? 0 : @will_pay_debt
+    num + @income - @rent - @expenses_total - account_for_debt - @will_save
   end
 
   def calc_savings(num)
@@ -70,6 +73,21 @@ class EstimateController < ApplicationController
 
   def calc_debt(num)
     num - @will_pay_debt
+  end
+
+  def calc_debt_end
+    return nil unless @debt.positive?
+
+    now = Time.now
+    counter = now.month
+    amount = @debt
+
+    while amount.positive?
+      amount -= @will_pay_debt
+      counter += 1
+    end
+    month = Date::MONTHNAMES[counter.month.from_now.month]
+    "#{month}, #{counter.month.from_now.year}"
   end
 
   def estimate_checking_params
