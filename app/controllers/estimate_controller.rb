@@ -3,12 +3,12 @@ class EstimateController < ApplicationController
   before_action :authorized
 
   def initialize_estimate
-    @income = income
-    @checking = checking
-    @savings = savings
-    @debt = debt
-    @rent = rent
-    @will_save = will_save
+    @income = user_info.income
+    @checking = user_info.checking
+    @savings = user_info.savings
+    @debt = user_info.debt
+    @rent = user_info.rent
+    @will_save = user_info.will_save
     @will_pay_debt = will_pay_debt
     @expenses_total = expenses_total
   end
@@ -27,7 +27,8 @@ class EstimateController < ApplicationController
   end
 
   def income_after_expenses
-    @income - @will_save - @will_pay_debt - @expenses_total
+    account_for_debt = @debt <= 0 ? 0 : @will_pay_debt
+    @income - @rent - @expenses_total - account_for_debt - @will_save
   end
 
   def chart
@@ -50,15 +51,20 @@ class EstimateController < ApplicationController
 
   def est_object(prev, date_num)
     debt = calc_debt(prev[:debt])
+    checking = calc_checking(prev[:checking], debt)
+    savings = calc_savings(prev[:savings])
     {
-      checking: calc_checking(prev[:checking], debt),
-      savings: calc_savings(prev[:savings]),
+      checking: checking,
+      savings: savings,
       debt: debt <= 0 ? 0 : debt,
       prev_checking: prev[:checking],
       prev_savings: prev[:savings],
       prev_debt: prev[:debt] <= 0 ? 0 : prev[:debt],
       month: date_num.month.from_now.month,
-      year: date_num.month.from_now.year
+      year: date_num.month.from_now.year,
+      checking_change: diff(prev[:checking], checking),
+      savings_change: diff(prev[:savings], savings),
+      debt_change: debt <= 0 ? 0 : diff(prev[:debt], debt)
     }
   end
 
@@ -78,8 +84,7 @@ class EstimateController < ApplicationController
   def calc_debt_end
     return nil unless @debt.positive?
 
-    now = Time.now
-    counter = now.month
+    counter = 0
     amount = @debt
 
     while amount.positive?
@@ -98,43 +103,24 @@ class EstimateController < ApplicationController
     UserInfo.find_by user_id: @user.id
   end
 
-  def rent
-    user_info.rent
-  end
-
-  def savings
-    user_info.savings
-  end
-
-  def checking
-    user_info.checking
-  end
-
-  def income
-    user_info.income
-  end
-
-  def debt
-    user_info.debt
-  end
-
   def expenses
     Expense.where(user_id: @user.id)
   end
 
+  # EXCLUDES DEBT
   def expenses_total
-    expenses.sum(:amount)
+    expenses.reject { |e| e.category == 'debt' }.sum(&:amount)
   end
 
   def range
     params[:range].nil? ? 3 : params[:range]
   end
 
-  def will_save
-    user_info.will_save
-  end
-
   def will_pay_debt
     expenses.select { |e| e.category == 'debt' }.sum(&:amount)
+  end
+
+  def diff(num1, num2)
+    (num1 - num2).abs
   end
 end
