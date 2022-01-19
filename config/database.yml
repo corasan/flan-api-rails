@@ -1,15 +1,9 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
-#
 default: &default
   adapter: postgresql
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
   encoding: unicode
-  username: postgres
+  host: localhost
 
 development:
   <<: *default
@@ -25,3 +19,7 @@ test:
 production:
   <<: *default
   database: flan-production
+  username: postgres
+  password: "<%= ENV['FLAN_DATABASE_PASSWORD'] %>"
+  # url: 'postgresql://207.246.91.135:5433'
+
