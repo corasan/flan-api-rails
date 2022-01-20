@@ -1,9 +1,10 @@
 # UserController
 class UserController < ApplicationController
-  before_action :authorized, only: [:auto_login]
+  before_action :authorized, only: [:auto_login, :index]
 
   def index
-    User.find(params[:id])
+    res = User.find_by id: @user.id
+    render json: res
   end
 
   def create
@@ -32,7 +33,7 @@ class UserController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email)
+    params.require(:user).permit([:email, :first_name, :last_name])
   end
 
   def password_params(user)

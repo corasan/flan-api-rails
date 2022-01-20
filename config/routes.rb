@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   post '/signup', to: 'user#create'
   post '/login', to: 'user#login'
+  get '/user', to: 'user#index'
 
   get '/user/info', to: 'user_info#index'
   post '/user/info', to: 'user_info#create'
