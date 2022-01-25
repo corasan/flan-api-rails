@@ -17,19 +17,10 @@ test:
   database: flan-test
 
 production:
-  # <<: *default
-  # database: flan-production
-  # username: postgres
-  # password: "<%= ENV['FLAN_DATABASE_PASSWORD'] %>"
-  # url: 'postgresql://144.202.10.106:5432'
-  adapter: postgresql
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-  encoding: unicode
-  database: dkb1d9u4pmjtg
-  user: postgres
-  password: <%= ENV['FLAN_DATABASE_PASSWORD'] %>
-  url: postgresql://144.202.10.106:5432
+  <<: *default
+  database: flan-production
+  username: postgres
+  password: "<%= ENV['FLAN_DATABASE_PASSWORD'] %>"
 
 
 staging:
