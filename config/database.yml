@@ -20,6 +20,6 @@ production:
   <<: *default
   database: flan-production
   username: postgres
-  password: "<%= ENV['FLAN_DATABASE_PASSWORD'] %>"
+  # password: "<%= ENV['FLAN_DATABASE_PASSWORD'] %>"
   # url: 'postgresql://207.246.91.135:5433'
 
