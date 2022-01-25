@@ -23,3 +23,13 @@ production:
   password: "<%= ENV['FLAN_DATABASE_PASSWORD'] %>"
   url: 'postgresql://144.202.10.106:5432'
 
+
+staging:
+  adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  encoding: unicode
+  database: dkb1d9u4pmjtg
+  user: wtcnvzblrxfvpi
+  password: <%= ENV['FLAN_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
