@@ -27,9 +27,9 @@ production:
   timeout: 5000
   encoding: unicode
   database: dkb1d9u4pmjtg
-  user: wtcnvzblrxfvpi
+  user: postgres
   password: <%= ENV['FLAN_DATABASE_PASSWORD'] %>
-  url: <%= ENV['DATABASE_URL'] %>
+  url: postgresql://144.202.10.106:5432
 
 
 staging:
