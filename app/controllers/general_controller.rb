@@ -1,5 +1,5 @@
 class GeneralController < ApplicationController
-  def indef
+  def index
     render html: 'Flan API'
   end
 end
