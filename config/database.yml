@@ -24,11 +24,7 @@ production:
 
 
 staging:
-  adapter: postgresql
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-  encoding: unicode
-  database: dkb1d9u4pmjtg
-  user: wtcnvzblrxfvpi
-  password: <%= ENV['FLAN_DATABASE_PASSWORD'] %>
-  url: <%= ENV['DATABASE_URL'] %>
+  <<: *default
+  database: flan-staging
+  username: postgres
+  password: <%= ENV['FLAN_STAGING_DATABASE_PASSWORD'] %>
