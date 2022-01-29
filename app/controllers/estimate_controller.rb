@@ -14,10 +14,10 @@ class EstimateController < ApplicationController
   end
 
   def index
+    render json: {} if user_info.nil?
     initialize_estimate
 
     data = generate_data
-    render json: {} if data.nil?
     render json: {
       estimate: date_formatted_estimate(data),
       income_after_expenses: income_after_expenses,
