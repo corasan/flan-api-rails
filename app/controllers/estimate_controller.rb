@@ -17,6 +17,7 @@ class EstimateController < ApplicationController
     initialize_estimate
 
     data = generate_data
+    render json: {} if data.nil?
     render json: {
       estimate: date_formatted_estimate(data),
       income_after_expenses: income_after_expenses,
