@@ -10,6 +10,7 @@ class UserController < ApplicationController
   def create
     @user = User.create(user_params)
     password = Password.create(password_params(@user))
+    UserInfo(income: 0, checking: 0, rent: 0, savings: 0, debt: 0, will_save: 0)
     if @user.valid? && password
       render_token_and_user
     else
