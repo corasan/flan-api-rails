@@ -27,4 +27,4 @@ staging:
   <<: *default
   database: flan-staging
   username: postgres
-  password: <%= ENV['FLAN_STAGING_DATABASE_PASSWORD'] %>
+  password: "<%= ENV['FLAN_DATABASE_PASSWORD'] %>"
