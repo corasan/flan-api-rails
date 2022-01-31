@@ -2,14 +2,20 @@
 class EstimateController < ApplicationController
   before_action :authorized
 
+  def initialize_user_info
+    @user_info = user_info
+  end
+
   def index
-    raise ActiveRecord::RecordNotFound if user_info.nil?
+    initialize_user_info
+
+    raise ActiveRecord::RecordNotFound if @user_info.nil?
 
     data = generate_data
     render json: {
       estimate: date_formatted_estimate(data),
       income_after_expenses: income_after_expenses,
-      will_save: user_info.will_save,
+      will_save: @user_info.will_save,
       will_pay_debt: will_pay_debt,
       debt_end: calc_debt_end
     }
@@ -18,14 +24,16 @@ class EstimateController < ApplicationController
   end
 
   def income_after_expenses
-    account_for_debt = user_info.debt <= 0 ? 0 : will_pay_debt
-    user_info.income - user_info.rent - expenses_total - account_for_debt - user_info.will_save
+    @user_info.income - @user_info.rent - expenses_total - @user_info.will_save - account_for_debt(@user_info.debt)
   end
 
   def chart
-    raise ActiveRecord::RecordNotFound if user_info.nil?
+    raise ActiveRecord::RecordNotFound if @user_info.nil?
 
-    render json: generate_data
+    data = generate_data
+    raise StandardError if data.nil?
+
+    render json: data
 
   rescue ActiveRecord::RecordNotFound => e
     render json: { error: e.to_s }
@@ -33,9 +41,13 @@ class EstimateController < ApplicationController
 
   private
 
+  def account_for_debt(debt)
+    debt <= 0 ? 0.0 : will_pay_debt
+  end
+
   def generate_data
     now = Time.now
-    arr = [{ checking: user_info.checking, savings: user_info.savings, debt: user_info.debt, month: now.month, year: now.year }]
+    arr = [{ checking: @user_info.checking, savings: @user_info.savings, debt: @user_info.debt, month: now.month, year: now.year }]
     (0..range.to_i).each { |x| arr.push(est_object(arr[-1], now.month + x)) }
     arr
   end
@@ -63,13 +75,12 @@ class EstimateController < ApplicationController
     }
   end
 
-  def calc_checking(num, debt)
-    account_for_debt = debt <= 0 ? 0 : will_pay_debt
-    num + user_info.income - user_info.rent - expenses_total - account_for_debt - user_info.will_save
+  def calc_checking(num, debt_arg)
+    num + @user_info.income - @user_info.rent - expenses_total - @user_info.will_save - account_for_debt(debt_arg)
   end
 
   def calc_savings(num)
-    num + user_info.will_save
+    num + @user_info.will_save
   end
 
   def calc_debt(num)
@@ -77,12 +88,12 @@ class EstimateController < ApplicationController
   end
 
   def calc_debt_end
-    return nil unless user_info.debt.positive?
+    return 'Never' unless @user_info.debt.positive?
 
     counter = 0
-    amount = user_info.debt
+    amount = @user_info.debt
 
-    while amount.positive?
+    while amount.positive? && will_pay_debt.positive?
       amount -= will_pay_debt
       counter += 1
     end
@@ -112,7 +123,7 @@ class EstimateController < ApplicationController
   end
 
   def will_pay_debt
-    expenses.select { |e| e.category == 'debt' }.sum(&:amount)
+    Expense.where(user_id: @user.id, category: 'debt').calculate(:sum, :amount)
   end
 
   def diff(num1, num2)

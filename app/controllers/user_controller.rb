@@ -10,6 +10,7 @@ class UserController < ApplicationController
   def create
     @user = User.create(user_params)
     password = Password.create(password_params(@user))
+    UserInfo.create(user_id: @user.id, income: 0, checking: 0, savings: 0, will_save: 0, debt: 0, rent: 0)
     if @user.valid? && password
       render_token_and_user
     else
@@ -19,11 +20,13 @@ class UserController < ApplicationController
 
   def login
     @user = User.find_by email: params[:email]
-    if @user && authenticate(params[:password])
-      render_token_and_user
-    else
-      render json: { error: 'Invalid username or password' }
-    end
+
+    raise ActiveRecord::RecordNotFound if @user.nil?
+
+    render_token_and_user if @user && authenticate(params[:password])
+
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Invalid username or password' }
   end
 
   def auto_login
