@@ -8,7 +8,6 @@ class EstimateController < ApplicationController
 
   def index
     initialize_user_info
-
     raise ActiveRecord::RecordNotFound if @user_info.nil?
 
     data = generate_data
@@ -30,10 +29,7 @@ class EstimateController < ApplicationController
   def chart
     raise ActiveRecord::RecordNotFound if @user_info.nil?
 
-    data = generate_data
-    raise StandardError if data.nil?
-
-    render json: data
+    render json: generate_data
 
   rescue ActiveRecord::RecordNotFound => e
     render json: { error: e.to_s }
@@ -92,7 +88,6 @@ class EstimateController < ApplicationController
 
     counter = 0
     amount = @user_info.debt
-
     while amount.positive? && will_pay_debt.positive?
       amount -= will_pay_debt
       counter += 1
@@ -113,7 +108,6 @@ class EstimateController < ApplicationController
     Expense.where(user_id: @user.id)
   end
 
-  # EXCLUDES DEBT
   def expenses_total
     expenses.reject { |e| e.category == 'debt' }.sum(&:amount)
   end
