@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get '/', to: 'general#index'
-  post '/signup', to: 'user#create'
+  post '/signup', to: 'registration#create'
   post '/login', to: 'user#login'
   get '/user', to: 'user#index'
 

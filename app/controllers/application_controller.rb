@@ -1,6 +1,10 @@
 # ApplicationController
 class ApplicationController < ActionController::API
-  before_action :authorized, only: [:decoded_token, :logged_in_user]
+  include Firebase::Auth::Authenticable
+
+  before_action :authenticate_user
+
+  # before_action :authorized, only: [:decoded_token, :logged_in_user]
 
   def encode_token(payload)
     JWT.encode({ exp: Time.now.to_i * 60 * 60 * 24, **payload }, key, 'HS512', exp_leeway: 30)
