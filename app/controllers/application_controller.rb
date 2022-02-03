@@ -69,4 +69,13 @@ class ApplicationController < ActionController::API
   def key
     Rails.application.credentials.active_record_encryption.primary_key
   end
+
+  def token_from_headers
+    request.headers['Authorization']&.split&.last
+  end
+
+  def auth_payload
+    @payload = FirebaseIdToken::Signature.verify token_from_headers
+    @user = User.find_by(uid: @payload['sub'])
+  end
 end

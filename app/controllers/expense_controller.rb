@@ -1,6 +1,7 @@
 # ExpenseController
 class ExpenseController < ApplicationController
-  before_action :authorized
+  before_action :authenticate_user
+  before_action :auth_payload
 
   def index
     expenses = all_expenses.map { |e| expense_object(e) }

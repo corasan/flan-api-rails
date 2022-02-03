@@ -1,6 +1,7 @@
 # UserController
 class UserController < ApplicationController
-  before_action :authorized, only: [:auto_login, :index]
+  before_action :authenticate_user
+  before_action :auth_payload
 
   def index
     res = User.find_by id: @user.id

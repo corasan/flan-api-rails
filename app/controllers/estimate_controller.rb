@@ -1,6 +1,7 @@
 # EstimateController
 class EstimateController < ApplicationController
-  before_action :authorized
+  before_action :authenticate_user
+  before_action :auth_payload
 
   def initialize_user_info
     @user_info = user_info

@@ -1,6 +1,7 @@
 # UserInfoController
 class UserInfoController < ApplicationController
-  before_action :authorized
+  before_action :authenticate_user
+  before_action :auth_payload
 
   def index
     render json: info
