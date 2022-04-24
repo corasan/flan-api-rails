@@ -19,6 +19,10 @@ Rails.application.routes.draw do
 
   post '/auth/refresh_token', to: 'refresh_token#index'
 
+  namespace :v2 do
+    resources :user, :expenses, :expense, :auth, :signup, :login
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
