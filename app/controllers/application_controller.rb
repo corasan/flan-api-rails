@@ -4,8 +4,6 @@ class ApplicationController < ActionController::API
 
   before_action :authenticate_user
 
-  # before_action :authorized, only: [:decoded_token, :logged_in_user]
-
   def encode_token(payload)
     JWT.encode({ exp: Time.now.to_i * 60 * 60 * 24, **payload }, key, 'HS512', exp_leeway: 30)
   end
@@ -77,5 +75,9 @@ class ApplicationController < ActionController::API
   def auth_payload
     @payload = FirebaseIdToken::Signature.verify token_from_headers
     @user = User.find_by(uid: @payload['sub'])
+  end
+
+  def fb_verify(fb_token)
+    FirebaseIdToken::Signature.verify(fb_token)
   end
 end
