@@ -1,7 +1,5 @@
 module V2
   class SignupController < ApplicationController
-    skip_before_action :authenticate_user
-
     def create
       p = token_payload
       user = User.create({**signup_params, email: p['email'], uid: p['uid']})

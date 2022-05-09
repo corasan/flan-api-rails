@@ -26,11 +26,11 @@ class SignupControllerTest < ActionDispatch::IntegrationTest
     {
       "iss"=>"https://securetoken.google.com/flan-45128",
       "aud"=>"flan-45128",
-      "auth_time"=>1651423513,
+      "auth_time"=>Time.now.to_i,
       "user_id"=>"LhQtWkV800ZaIJsrf3o6dycCxvr2",
       "sub"=>"LhQtWkV800ZaIJsrf3o6dycCxvr2",
-      "iat"=>1651423513,
-      "exp"=>1651427113,
+      "iat"=>Time.now.to_i,
+      "exp"=>Time.now.tomorrow.to_i,
       "email"=>"test1@flanapp.com",
       "email_verified"=>false,
       "firebase"=>{
