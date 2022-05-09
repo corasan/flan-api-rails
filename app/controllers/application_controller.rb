@@ -2,7 +2,7 @@
 class ApplicationController < ActionController::API
   include Firebase::Auth::Authenticable
 
-  before_action :authenticate_user
+  before_action :authenticate_request
 
   def encode_token(payload)
     JWT.encode({ exp: Time.now.to_i * 60 * 60 * 24, **payload }, key, 'HS512', exp_leeway: 30)
@@ -72,12 +72,14 @@ class ApplicationController < ActionController::API
     request.headers['Authorization']&.split&.last
   end
 
-  def auth_payload
-    @payload = FirebaseIdToken::Signature.verify token_from_headers
-    @user = User.find_by(uid: @payload['sub'])
+  # V2
+
+  def authenticate_request
+    FirebaseIdToken::Signature.verify token_from_headers
   end
 
-  def fb_verify(fb_token)
-    FirebaseIdToken::Signature.verify(fb_token)
+  def authenticate_user
+    @token_payload = FirebaseIdToken::Signature.verify token_from_headers
+    @user = User.find_by(uid: @token_payload['sub'])
   end
 end
