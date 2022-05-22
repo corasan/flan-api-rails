@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   namespace :v2 do
     resources :signup
     resources :login
+    resources :expense, except: :index
+    get '/expenses', to: 'expense#index'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

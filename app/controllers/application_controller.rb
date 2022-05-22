@@ -80,8 +80,6 @@ class ApplicationController < ActionController::API
 
   def authenticate_user
     @token_payload = FirebaseIdToken::Signature.verify token_from_headers
-    puts "Token Payload => #{@token_payload}"
-    puts "User ID => #{@token_payload['user_id']}"
     @user = User.find_by(uid: @token_payload['user_id'])
   end
 end
