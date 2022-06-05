@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :login
     resources :expense, except: :index
     get '/expenses', to: 'expense#index'
+    delete '/expense', to: 'expense#destroy'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

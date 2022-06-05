@@ -16,6 +16,11 @@ class ExpenseControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
   end
 
+  test 'Can delete expense' do
+    delete '/v2/expense', params: {id: 360}, headers: req_headers
+    assert_response :no_content
+  end
+
   private
 
   def create_payload

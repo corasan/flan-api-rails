@@ -14,6 +14,11 @@ module V2
       end
     end
 
+    def destroy
+      exp = Expense.find_by id: params[:id]
+      exp.destroy
+    end
+
     private
 
     def expense_params
