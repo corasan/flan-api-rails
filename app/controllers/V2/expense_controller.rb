@@ -14,6 +14,13 @@ module V2
       end
     end
 
+    def update
+      e = Expense.find_by id: params[:id]
+      e.update(expense_params)
+      e.save
+      render json: e
+    end
+
     def destroy
       exp = Expense.find_by id: params[:id]
       exp.destroy

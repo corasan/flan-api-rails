@@ -21,6 +21,11 @@ class ExpenseControllerTest < ActionDispatch::IntegrationTest
     assert_response :no_content
   end
 
+  test 'Can edit expense' do
+    put '/v2/expense', params: {id: 361, amount: 15.67}, headers: req_headers
+    assert_response :ok
+  end
+
   private
 
   def create_payload

@@ -8,3 +8,11 @@ expense_one:
   user: user_one
   id: 360
 
+expense_two:
+  name: Expense Two
+  amount: 9.99
+  category: home
+  frequency: monthly
+  user: user_one
+  id: 361
+
