@@ -1,5 +1,5 @@
 module V2
-  class ExpenseController < ApplicationController
+  class ExpensesController < ApplicationController
     def index
       render json: {expenses: all_expenses, total: total, pie_data: generate_pie_data}, status: :ok
     end
