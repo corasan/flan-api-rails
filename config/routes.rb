@@ -19,13 +19,13 @@ Rails.application.routes.draw do
 
   post '/auth/refresh_token', to: 'refresh_token#index'
 
-  namespace :v2 do
+  scope 'v2', module: 'v2' do
     resources :signup
     resources :login
-    resources :expense, except: :index
-    get '/expenses', to: 'expense#index'
-    delete '/expense', to: 'expense#destroy'
-    put '/expense', to: 'expense#update'
+    resources :user_info, except: :update
+    put '/user_info', to: 'user_info#update'
+    resources :expenses, except: :update
+    put '/expenses', to: 'expenses#update'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
