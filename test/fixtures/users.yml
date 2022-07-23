@@ -5,3 +5,6 @@ user_one:
 user_two:
   email: test2@flanapp.com
   uid: WXAlQTGhWVQFRVPSdfU6IkaJIPc2
+user_three:
+  email: test3@flanapp.com
+  uid: zeKYkWvrqbgTMQpSJElfz8WmL5A2
