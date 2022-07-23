@@ -91,7 +91,6 @@ module V2
       raise ActiveRecord::RecordNotFound if info.nil?
 
       @user_info = info
-      puts @user_info
     rescue ActiveRecord::RecordNotFound => e
       render json: { error: e.to_s }, status: :no_content
     end
