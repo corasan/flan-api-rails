@@ -5,6 +5,9 @@ class ApplicationController < ActionController::API
   before_action :authenticate_user
   before_action :is_authorized
 
+  @user
+  @token_payload
+
   def auth_header
     request.headers['Authorization']&.split&.last
   end
@@ -24,5 +27,9 @@ class ApplicationController < ActionController::API
 
   def is_authorized
     render json: { message: 'Please log in' }, status: :unauthorized unless @user
+  end
+
+  def diff(num1, num2)
+    (num1 - num2).abs
   end
 end
