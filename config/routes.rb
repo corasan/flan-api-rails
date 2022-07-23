@@ -24,11 +24,13 @@ Rails.application.routes.draw do
     resources :login
     resources :user_info
     put '/user_info', to: 'user_info#update'
+
     resources :expenses
     put '/expenses', to: 'expenses#update'
     delete '/expenses', to: 'expenses#destroy'
 
-    resources :estimate
+    resources :estimate, except: :show
+    get '/estimate/chart', to: 'estimate#chart'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

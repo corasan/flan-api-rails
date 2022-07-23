@@ -17,6 +17,15 @@ module V2
       }, status: :ok
     end
 
+    def chart
+      raise ActiveRecord::RecordNotFound if @user_info.nil?
+
+      render json: generate_data, status: :ok
+
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { error: e.to_s }, status: :no_content
+    end
+
     def estimate_params
       params.permit(:range)
     end
