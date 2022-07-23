@@ -22,9 +22,9 @@ Rails.application.routes.draw do
   scope 'v2', module: 'v2' do
     resources :signup
     resources :login
-    resources :user_info, except: :update
+    resources :user_info
     put '/user_info', to: 'user_info#update'
-    resources :expenses, except: [:update, :destroy]
+    resources :expenses
     put '/expenses', to: 'expenses#update'
     delete '/expenses', to: 'expenses#destroy'
 
