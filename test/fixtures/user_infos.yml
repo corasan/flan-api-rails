@@ -7,6 +7,7 @@ info_one:
   debt: 5879.78
   savings: 500.00
   checking: 800
+  will_save: 500
   user: user_two
 info_two:
   id: 345
@@ -15,5 +16,6 @@ info_two:
   debt: 5879.78
   savings: 500.00
   checking: 800
+  will_save: 500
   user: user_two
 
