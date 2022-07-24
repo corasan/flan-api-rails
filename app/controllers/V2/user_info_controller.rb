@@ -5,11 +5,11 @@ module V2
     end
 
     def create
-      if !info.nil?
-        render json: info, status: :ok
-      else
+      if info.nil?
         obj = {user_id: @user.id, **user_info_params}
-        render json: User.info.create(obj), status: :ok
+        render json: UserInfo.create(obj), status: :ok
+      else
+        render json: info, status: :ok
       end
     end
 
