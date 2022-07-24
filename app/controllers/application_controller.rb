@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_user
     @token_payload = FirebaseIdToken::Signature.verify auth_header
-    @user = User.find_by(uid: @token_payload['user_id'])
+    @user = User.find_by(uid: @token_payload[:user_id])
   end
 
   def current_user

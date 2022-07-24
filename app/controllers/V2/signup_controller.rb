@@ -5,6 +5,7 @@ module V2
     def create
       p = token_payload
       user = User.create({**signup_params, email: p['email'], uid: p['uid']})
+      create_user_info
       if !user.valid?
         render json: {message: 'A user with this email address already exists.'}, status: :conflict
       else
@@ -13,13 +14,17 @@ module V2
     end
 
     def signup_params
-      params.permit(:first_name, :last_name)
+      params.require('user').permit(:first_name, :last_name)
     end
 
     private
 
+    def create_user_info
+      UserInfo.create({user_id: @user.id})
+    end
+
     def token_payload
-      token = request.headers['Authorization']&.split&.last
+      token = params[:token] || request.headers['Authorization']&.split&.last
       FirebaseIdToken::Signature.verify(token)
     end
   end
