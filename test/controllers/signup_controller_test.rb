@@ -7,19 +7,19 @@ class SignupControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'if user exists it should conflict' do
-    post '/v2/signup', params: payload, headers: headers
-    post '/v2/signup', params: payload, headers: headers
+    post '/v2/signup', params: payload, headers: req_headers
     assert_response :conflict
   end
 
   private
 
-  def create_token
-    JWT.encode token_payload, OpenSSL::PKey::RSA.new(FirebaseIdToken::Testing::Certificates.private_key), 'RS256'
-  end
-
   def payload
     {first_name: 'Test', last_name: 'User'}
+  end
+
+
+  def headers
+    {Authorization: "Bearer #{create_token(token_payload)}"}
   end
 
   def token_payload
@@ -40,9 +40,5 @@ class SignupControllerTest < ActionDispatch::IntegrationTest
         "sign_in_provider"=>"password"
       }
     }
-  end
-
-  def headers
-    {Authorization: "Bearer #{create_token}"}
   end
 end
