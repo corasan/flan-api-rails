@@ -3,7 +3,6 @@ class ApplicationController < ActionController::API
   include Firebase::Auth::Authenticable
 
   before_action :authenticate_user
-  before_action :is_authorized
 
   @user
   @token_payload
@@ -18,15 +17,11 @@ class ApplicationController < ActionController::API
 
   def authenticate_user
     @token_payload = FirebaseIdToken::Signature.verify auth_header
-    @user = User.find_by(uid: @token_payload[:user_id])
+    @user = User.find_by(uid: @token_payload['user_id'])
   end
 
   def current_user
     @user
-  end
-
-  def is_authorized
-    render json: { message: 'Please log in' }, status: :unauthorized unless @user
   end
 
   def diff(num1, num2)
