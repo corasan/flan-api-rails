@@ -31,6 +31,9 @@ Rails.application.routes.draw do
 
     resources :estimate, except: :show
     get '/estimate/chart', to: 'estimate#chart'
+
+    resources :user
+    put '/user', to: 'user#update'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
