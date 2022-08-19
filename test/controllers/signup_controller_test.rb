@@ -14,7 +14,7 @@ class SignupControllerTest < ActionDispatch::IntegrationTest
   private
 
   def payload
-    {first_name: 'Test', last_name: 'User'}
+    {user: {first_name: 'Test', last_name: 'User'}}
   end
 
 

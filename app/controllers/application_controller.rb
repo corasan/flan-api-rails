@@ -16,8 +16,12 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_user
-    @token_payload = FirebaseIdToken::Signature.verify auth_header
-    @user = User.find_by(uid: @token_payload['user_id'])
+    begin
+      @token_payload = FirebaseIdToken::Signature.verify! auth_header
+      @user = User.find_by(uid: @token_payload['user_id'])
+    rescue FirebaseIdToken::Exceptions::CertificateNotFound
+      render json: {message: 'Token Error: Unauthorized'}, status: :unauthorized
+    end
   end
 
   def current_user
