@@ -1,28 +1,28 @@
 require "test_helper"
 
-class ExpensesControllerTest < ActionDispatch::IntegrationTest
+class ExpenseControllerTest < ActionDispatch::IntegrationTest
   test 'Can get all user expenses' do
-    get '/v2/expenses', headers: req_headers
+    get '/v2/expense', headers: req_headers
     assert_response :ok
   end
 
   test 'Can create and expense' do
-    post '/v2/expenses', params: create_payload, headers: req_headers
+    post '/v2/expense', params: create_payload, headers: req_headers
     assert_response :ok
   end
 
   test 'Cannot create expense with bad request' do
-    post '/v2/expenses', params: bad_create_payload, headers: req_headers
+    post '/v2/expense', params: bad_create_payload, headers: req_headers
     assert_response :bad_request
   end
 
   test 'Can delete expense' do
-    delete '/v2/expenses', params: {id: 360}, headers: req_headers
+    delete '/v2/expense', params: {id: 360}, headers: req_headers
     assert_response :no_content
   end
 
   test 'Can edit expense' do
-    put '/v2/expenses', params: {id: 361, amount: 15.67}, headers: req_headers
+    put '/v2/expense', params: {id: 361, amount: 15.67}, headers: req_headers
     assert_response :ok
   end
 

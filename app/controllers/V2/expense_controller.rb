@@ -1,5 +1,5 @@
 module V2
-  class ExpensesController < ApplicationController
+  class ExpenseController < ApplicationController
     def index
       render json: {expenses: all_expenses, total: total, pie_data: generate_pie_data}, status: :ok
     end
@@ -41,14 +41,11 @@ module V2
     end
 
     def generate_pie_data
-      def pie_data
-        arr = []
-        all_expenses.group_by(&:category).each_pair do |k, v|
-          arr.push({ category: k, value: v.sum(&:amount) })
-        end
-        arr
+      arr = []
+      all_expenses.group_by(&:category).each_pair do |k, v|
+        arr.push({ category: k, value: v.sum(&:amount) })
       end
+      arr
     end
   end
 end
-

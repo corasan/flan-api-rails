@@ -25,9 +25,9 @@ Rails.application.routes.draw do
     resources :user_info
     put '/user_info', to: 'user_info#update'
 
-    resources :expenses
-    put '/expenses', to: 'expenses#update'
-    delete '/expenses', to: 'expenses#destroy'
+    resources :expense
+    put '/expense', to: 'expenses#update'
+    delete '/expense', to: 'expenses#destroy'
 
     resources :estimate, except: :show
     get '/estimate/chart', to: 'estimate#chart'
