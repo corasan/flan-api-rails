@@ -47,11 +47,14 @@ module V2
     def generate_data
       now = Time.now
       arr = [{ checking: @user_info.checking, savings: @user_info.savings, debt: @user_info.debt, month: now.month, year: now.year }]
-      (0..range.to_i).each { |x| arr.push(est_object(arr[-1], now.month + x)) }
+      (1..range.to_i).each { |x| arr.push(est_object(arr[-1], x.month.from_now.month, x.month.from_now.year)) }
       arr
     end
 
-    def est_object(prev, date_num)
+    # @param [Object] prev
+    # @param [Number] month
+    # @param [Number] year
+    def est_object(prev, month, year)
       debt = calc_debt(prev[:debt])
       checking = calc_checking(prev[:checking], debt)
       savings = calc_savings(prev[:savings])
@@ -62,8 +65,8 @@ module V2
         prev_checking: prev[:checking],
         prev_savings: prev[:savings],
         prev_debt: prev[:debt] <= 0 ? 0 : prev[:debt],
-        month: date_num.month.from_now.month,
-        year: date_num.month.from_now.year,
+        month: month,
+        year: year,
         checking_change: diff(prev[:checking], checking),
         savings_change: diff(prev[:savings], savings),
         debt_change: debt <= 0 ? 0 : diff(prev[:debt], debt)
