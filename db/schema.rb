@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_02_123724) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_07_24_192113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -22,24 +21,24 @@ ActiveRecord::Schema.define(version: 2022_02_02_123724) do
     t.string "category"
     t.string "frequency"
     t.uuid "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_expenses_on_user_id"
   end
 
   create_table "passwords", force: :cascade do |t|
     t.string "value"
     t.uuid "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_passwords_on_user_id"
   end
 
   create_table "refresh_tokens", force: :cascade do |t|
     t.uuid "user_id", null: false
     t.string "token"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
   end
 
@@ -49,8 +48,8 @@ ActiveRecord::Schema.define(version: 2022_02_02_123724) do
     t.decimal "savings"
     t.decimal "checking"
     t.uuid "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.decimal "debt"
     t.decimal "will_save"
     t.index ["user_id"], name: "index_user_infos_on_user_id"
@@ -58,11 +57,12 @@ ActiveRecord::Schema.define(version: 2022_02_02_123724) do
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "first_name"
     t.string "last_name"
     t.string "uid"
+    t.boolean "setup_completed"
   end
 
   add_foreign_key "expenses", "users"

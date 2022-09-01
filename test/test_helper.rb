@@ -10,4 +10,61 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  #
+  setup do
+    FirebaseIdToken.test!
+  end
+
+  def req_headers
+    {Authorization: "Bearer #{create_token(user_two_token_payload)}"}
+  end
+
+  def req_headers_three
+    {Authorization: "Bearer #{create_token(user_three_token_payload)}"}
+  end
+
+  def create_token(payload)
+    JWT.encode payload, OpenSSL::PKey::RSA.new(FirebaseIdToken::Testing::Certificates.private_key), 'RS256'
+  end
+
+  def user_two_token_payload
+    {
+      "iss"=>"https://securetoken.google.com/flan-45128",
+      "aud"=>"flan-45128",
+      "auth_time"=>Time.now.to_i,
+      "user_id"=>"WXAlQTGhWVQFRVPSdfU6IkaJIPc2",
+      "sub"=>"WXAlQTGhWVQFRVPSdfU6IkaJIPc2",
+      "iat"=>Time.now.to_i,
+      "exp"=>Time.now.tomorrow.to_i,
+      "email"=>"test2@flanapp.com",
+      "email_verified"=>false,
+      "firebase"=>{
+        "identities"=>{
+          "email"=>["test2@flanapp.com"]
+        },
+        "sign_in_provider"=>"password"
+      }
+    }
+  end
+
+  def user_three_token_payload
+    {
+      "iss"=>"https://securetoken.google.com/flan-45128",
+      "aud"=>"flan-45128",
+      "auth_time"=>Time.now.to_i,
+      "user_id"=>"zeKYkWvrqbgTMQpSJElfz8WmL5A2",
+      "sub"=>"zeKYkWvrqbgTMQpSJElfz8WmL5A2",
+      "iat"=>Time.now.to_i,
+      "exp"=>Time.now.tomorrow.to_i,
+      "email"=>"test3@flanapp.com",
+      "email_verified"=>false,
+      "firebase"=>{
+        "identities"=>{
+          "email"=>["test3@flanapp.com"]
+        },
+        "sign_in_provider"=>"password"
+      }
+    }
+  end
+
 end

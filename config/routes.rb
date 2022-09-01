@@ -19,6 +19,23 @@ Rails.application.routes.draw do
 
   post '/auth/refresh_token', to: 'refresh_token#index'
 
+  scope 'v2', module: 'v2' do
+    resources :signup
+    resources :login
+    resources :user_info
+    put '/user_info', to: 'user_info#update'
+
+    resources :expense
+    put '/expense', to: 'expenses#update'
+    delete '/expense', to: 'expenses#destroy'
+
+    resources :estimate, except: :show
+    get '/estimate/chart', to: 'estimate#chart'
+
+    resources :user
+    put '/user', to: 'user#update'
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
