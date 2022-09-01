@@ -116,7 +116,7 @@ module V2
     end
 
     def range
-      params[:range].nil? ? 3 : params[:params]
+      params[:range].nil? ? 3 : params[:range]
     end
 
     def amount_towards_debt
