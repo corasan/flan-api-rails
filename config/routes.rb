@@ -34,6 +34,8 @@ Rails.application.routes.draw do
 
     resources :user
     put '/user', to: 'user#update'
+
+    get '/', to: 'default#index'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
